@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'polymorphic',
+
+
     'base',
     'warehouse',
     'rest_framework',
@@ -44,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'markdown',
     'api',
+    'storage',
 ]
 
 MIDDLEWARE = [
