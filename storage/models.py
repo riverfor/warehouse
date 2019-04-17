@@ -1,6 +1,7 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from warehouse.models import WarehouseCell
+from product.models import Product, StorageUnit
 
 
 class Storage(PolymorphicModel):
@@ -9,9 +10,15 @@ class Storage(PolymorphicModel):
 
 
 class DocumentPlanIn(models.Model):
-    cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE)
-    total_plan = models.IntegerField()
-    fact = models.IntegerField()
+    cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE, verbose_name='Адрес приемки')
+
+
+class DocumentPlanInProducts(models.Model):
+    document = models.ForeignKey(DocumentPlanIn, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
+    unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name='Единица хранения')
+    plan = models.IntegerField(verbose_name='Плановое количество базовых едениц')
+    fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц')
 
 
 class DocumentIn(Storage):

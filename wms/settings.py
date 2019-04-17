@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'markdown',
     'api',
     'storage',
+    'product',
 ]
 
 MIDDLEWARE = [
