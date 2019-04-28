@@ -15,7 +15,7 @@ class DocumentProducts(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name='Единица хранения')
     plan = models.IntegerField(verbose_name='Плановое количество базовых едениц')
-    fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц')
+    fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц',)
 
 
 class DocumentEntry(Storage):
@@ -46,7 +46,17 @@ class DocumentEntry(Storage):
 
     def update_plan(self):
         product_entry = self.doc_plan.documentproducts_set.get(product=self.nomenclature)
-        product_entry.fact += self.quantity
+        if self.pk is None:
+            product_entry.fact += self.quantity
+        else:
+            quantity = self.doc_plan.documententry_set.filter(nomenclature=self.nomenclature).\
+                exclude(pk=self.pk).aggregate(Sum('quantity'))
+            if quantity['quantity__sum'] is None:
+                amount = 0
+            else:
+                amount = quantity['quantity__sum']
+
+            product_entry.fact = amount + self.quantity
         product_entry.save()
 
     def create_container(self):
@@ -54,15 +64,23 @@ class DocumentEntry(Storage):
             self.container_type = self.nomenclature.base_cont_type
 
         import uuid
-        cont = Container.objects.create(cont_type=self.container_type, barcode=uuid.uuid4().hex[:20].upper())
-        if cont:
-            return cont
+        if self.pk is None:
+            cont = Container.objects.create(cont_type=self.container_type, barcode=uuid.uuid4().hex[:20].upper())
+            if cont:
+                return cont
+            else:
+                raise ValidationError("Ошибка создания контейнера")
         else:
-            raise ValidationError("Ошибка создания контейнера")
+            return self.container
 
     def add_product_to_container(self, container):
-        ContainerProducts.objects.create(container=container, product=self.nomenclature, unit=self.storage_unit,
+        if self.pk is None:
+            ContainerProducts.objects.create(container=container, product=self.nomenclature, unit=self.storage_unit,
                                          amount=self.quantity)
+        else:
+            container = ContainerProducts.objects.get(pk=self.container.pk)
+            container.amount = self.quantity
+            container.save()
 
     @transaction.atomic
     def save(self, *args, **kwargs):

@@ -26,6 +26,9 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Краткое описание')
     base_cont_type = models.ForeignKey(ContainerParams, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.vendor) + " " + str(self.name)
+
     class Meta:
         verbose_name = 'Номенклатура'
         verbose_name_plural = "Номенклатуры"

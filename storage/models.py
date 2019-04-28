@@ -16,16 +16,12 @@ class ContainerProducts(models.Model):
     unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name="Единица хранения")
     amount = models.IntegerField(verbose_name="Количество")
 
-    def __str__(self):
-        return self.container.cont_type.name + " " + self.container.pk + " " + self.product.name
-
 
 class Storage(PolymorphicModel):
     cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE, verbose_name="Ячейка")
-    container = models.ForeignKey(Container, on_delete=models.CASCADE)
+    container = models.ForeignKey(Container, on_delete=models.CASCADE, null=True, blank=True)
 
-    def __str__(self):
-        return self.cell + " " + self.container.cont_type.name + " " + self.container.pk
+
 
 
 

@@ -1,3 +1,4 @@
+import uuid
 from base.models import AbstractBase, models
 from django.contrib.auth.models import User
 
@@ -8,7 +9,7 @@ class Warehouse (AbstractBase):
 
     class Meta:
         verbose_name = "Склад"
-        verbose_name_plural = "ЯСклады"
+        verbose_name_plural = "Склады"
 
 
 class Rack (AbstractBase):
@@ -19,8 +20,6 @@ class Rack (AbstractBase):
         verbose_name_plural = "Стеллажи"
 
 
-
-
 class WarehouseCell (AbstractBase):
     rack = models.ForeignKey(Rack, on_delete=models.CASCADE, verbose_name="Стеллаж")
     tier = models.CharField(max_length=2, verbose_name="Ярус")
@@ -28,6 +27,12 @@ class WarehouseCell (AbstractBase):
     cell_width = models.DecimalField(max_digits=5, decimal_places=3,  max_length=10, verbose_name='Ширина')
     cell_height = models.DecimalField(max_digits=5, decimal_places=3, max_length=10, verbose_name='Высота')
     cell_length = models.DecimalField(max_digits=5, decimal_places=3, max_length=10, verbose_name='Глубина')
+    barcode = models.CharField(max_length=20, null=True, blank=True, unique=True, verbose_name="Штрих код")
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.barcode = uuid.uuid4().hex[:20].upper()
+        super(WarehouseCell, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Ячейка"
