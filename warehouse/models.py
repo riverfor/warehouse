@@ -18,8 +18,7 @@ class Rack (AbstractBase):
         verbose_name = "Стеллаж"
         verbose_name_plural = "Стеллажи"
 
-    def __str__(self):
-        return self.name
+
 
 
 class WarehouseCell (AbstractBase):
@@ -34,5 +33,3 @@ class WarehouseCell (AbstractBase):
         verbose_name = "Ячейка"
         verbose_name_plural = "Ячейки"
 
-    def __str__(self):
-        return self.rack.name + "-" + self.tier + "-" + self.position

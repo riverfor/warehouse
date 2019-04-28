@@ -1,6 +1,13 @@
 from django.db import models
 
 
+class ContainerParams(models.Model):
+    name = models.CharField(max_length=20)
+    cont_width = models.IntegerField(verbose_name='Ширина')
+    cont_height = models.IntegerField(verbose_name='Высота')
+    cont_length = models.IntegerField(verbose_name='Глубина')
+
+
 class AccountingModelProducts(models.Model):
     name = models.CharField(max_length=50)
     use_date = models.BooleanField(default=False, verbose_name='Учет по срока годности')
@@ -11,21 +18,17 @@ class AccountingModelProducts(models.Model):
         verbose_name = 'Модель учета'
         verbose_name_plural = 'Модели учета'
 
-    def __str__(self):
-        return self.name
-
 
 class Product(models.Model):
+    vendor = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=50, verbose_name='Название')
     model = models.ForeignKey(AccountingModelProducts, on_delete=models.CASCADE, verbose_name='Модель учета')
     description = models.TextField(verbose_name='Краткое описание')
+    base_cont_type = models.ForeignKey(ContainerParams, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Номенклатура'
         verbose_name_plural = "Номенклатуры"
-
-    def __str__(self):
-        return self.name
 
 
 class StorageUnitsClass(models.Model):
@@ -35,12 +38,9 @@ class StorageUnitsClass(models.Model):
         verbose_name = 'Класс единица хранения'
         verbose_name_plural = "Классы единиц хранения"
 
-    def __str__(self):
-        return self.name
-
 
 class StorageUnit(models.Model):
-    product = models.ForeignKey(Product, on_delete= models.CASCADE, verbose_name='Номенклатура')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Номенклатура')
     ratio = models.IntegerField(default=1, verbose_name='коэфициент')
     unit_class = models.ForeignKey(StorageUnitsClass, on_delete=models.CASCADE,  verbose_name='Класс единицы хранения')
     unit_width = models.DecimalField(max_digits=5, decimal_places=3,  max_length=10, verbose_name='Ширина')
@@ -51,5 +51,3 @@ class StorageUnit(models.Model):
         verbose_name = 'Единица хранения'
         verbose_name_plural = "Единицы хранения"
 
-    def __str__(self):
-        return self.product.name + " " + self.unit_class.name
