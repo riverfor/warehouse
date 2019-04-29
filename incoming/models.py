@@ -11,7 +11,7 @@ class DocumentPlan(models.Model):
 
 
 class DocumentProducts(models.Model):
-    document = models.ForeignKey(DocumentPlan, on_delete=models.CASCADE)
+    document = models.ForeignKey(DocumentPlan, on_delete=models.CASCADE, related_name="products")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name='Единица хранения')
     plan = models.IntegerField(verbose_name='Плановое количество базовых едениц')
