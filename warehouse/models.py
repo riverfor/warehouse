@@ -15,6 +15,9 @@ class Warehouse (AbstractBase):
 class Rack (AbstractBase):
     name = models.CharField(max_length=2, verbose_name="Имя")
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Стеллаж"
         verbose_name_plural = "Стеллажи"

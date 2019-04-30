@@ -1,21 +1,17 @@
 from django.conf.urls import url, include
-from django.urls import path
 from rest_framework import routers
 
-from product.viewsets import ProductViewset, AccountingModelViewset, StorageUnitsClassViewset, StorageUnitViewset
-from warehouse.viewsets import WarehouseAPIView
-from storage.viewsets import StorageViewset, DocumentIncomingViewset, DocumentPlanViewSet, DocumentProductsViewset
+from api.views.product import ContainerClassViews, ProductModelView, ProductView, UnitClassView, UnitView
+from api.views.warehouse import WarehouseAPIView, CellAPIView
 
 router = routers.DefaultRouter()
-router.register(r'warehouse', WarehouseAPIView)
-router.register(r'storage', StorageViewset)
-router.register(r'incoming_entry', DocumentIncomingViewset)
-router.register(r'documents_plan', DocumentPlanViewSet)
-router.register(r'document_products', DocumentProductsViewset, base_name='document_products')
-router.register(r'products', ProductViewset, base_name='product')
-router.register(r'accounting_models', AccountingModelViewset, base_name='accounting_model')
-router.register(r'units_classes', StorageUnitsClassViewset, base_name='unit_class')
-router.register(r'units', StorageUnitViewset, base_name='unit')
+router.register(r'warehouses', WarehouseAPIView, base_name='warehouse')
+router.register(r'cells', CellAPIView, base_name='cell')
+router.register(r'container_classes', ContainerClassViews, base_name='container_class')
+router.register(r'product_models', ProductModelView, base_name='product_model')
+router.register(r'products', ProductView, base_name='product')
+router.register(r'unit_classes', UnitClassView, base_name='unit_class')
+router.register(r'units', UnitView, base_name='unit')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
