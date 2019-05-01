@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from base.serializers import AbstractSerializer
+from base.serializers import AbstractSerializer, LoggerSerializer
 from product.models import *
 
 
-class ContainerClassSerializer(serializers.ModelSerializer, AbstractSerializer):
+class ContainerClassSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='container_class-detail')
 
     class Meta:
@@ -18,7 +18,7 @@ class ContainerClassSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class ProductModelSerializer(serializers.ModelSerializer, AbstractSerializer):
+class ProductModelSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product_model-detail')
 
     class Meta:
@@ -32,7 +32,7 @@ class ProductModelSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class ProductListSerializer(serializers.ModelSerializer, AbstractSerializer):
+class ProductListSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
     model = ProductModelSerializer(read_only=True)
     base_cont_type = ContainerClassSerializer(read_only=True)
@@ -51,7 +51,7 @@ class ProductListSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(LoggerSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
 
     class Meta:
@@ -66,7 +66,7 @@ class ProductSerializer(serializers.ModelSerializer):
         )
 
 
-class UnitClassSerializer(serializers.ModelSerializer, AbstractSerializer):
+class UnitClassSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='unit_class-detail')
 
     class Meta:
@@ -77,7 +77,7 @@ class UnitClassSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class UnitListSerializer(serializers.ModelSerializer, AbstractSerializer):
+class UnitListSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='unit-detail')
     unit_class = UnitClassSerializer(read_only=True)
     product = ProductSerializer(read_only=True)
@@ -95,7 +95,7 @@ class UnitListSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class UnitSerializer(serializers.ModelSerializer, AbstractSerializer):
+class UnitSerializer(LoggerSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='unit-detail')
 
     class Meta:
@@ -111,7 +111,7 @@ class UnitSerializer(serializers.ModelSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
-class UnitEditSerializer(serializers.ModelSerializer):
+class UnitEditSerializer(LoggerSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='unit-detail')
 
     class Meta:
