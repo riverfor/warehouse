@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import WarehouseCell, Rack, Warehouse
+
+from users.models import Warehouse
+from .models import WarehouseCell, Rack
 
 admin.site.register(WarehouseCell)
 admin.site.register(Rack)

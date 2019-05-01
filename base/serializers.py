@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from rest_framework import serializers
 
-from api.serializers.owner import OwnerSerializer
+from api.serializers.owner import OwnerListSerializer
 
 
 class LoggerSerializer(serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class AbstractSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", label='Создано в', read_only=True)
     updated_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M:%S", label='Создано в', read_only=True)
 
-    owner = OwnerSerializer(read_only=True, many=False)
+    owner = OwnerListSerializer(read_only=True, many=False)
 
     class Meta:
         fields = (

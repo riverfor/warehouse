@@ -1,14 +1,5 @@
 import uuid
 from base.models import AbstractBase, models
-from django.contrib.auth.models import User
-
-
-class Warehouse (AbstractBase):
-    name = models.CharField(max_length=50, default="", verbose_name="Название")
-
-    class Meta:
-        verbose_name = "Склад"
-        verbose_name_plural = "Склады"
 
 
 class Rack (AbstractBase):

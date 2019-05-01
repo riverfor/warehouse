@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from base.serializers import AbstractSerializer, LoggerSerializer
-from warehouse.models import Warehouse, Rack, WarehouseCell
+from users.models import Warehouse
+from warehouse.models import Rack, WarehouseCell
 
 
 class RackListSerializer(LoggerSerializer, AbstractSerializer):
@@ -46,17 +47,4 @@ class CellListSerializer(LoggerSerializer, AbstractSerializer):
             'cell_height',
             'cell_length',
             'barcode',
-        ) + AbstractSerializer.Meta.fields
-
-
-class WarehouseSerializer(LoggerSerializer, AbstractSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='warehouse-detail')
-
-    class Meta:
-        model = Warehouse
-        fields = (
-            'url',
-            'name',
-            'owner',
-            'created_at',
         ) + AbstractSerializer.Meta.fields

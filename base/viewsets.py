@@ -1,5 +1,5 @@
 from django.contrib.admin.models import CHANGE, LogEntry
-from base.models import User
+from users.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from rest_framework import mixins, viewsets, status
@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from django.db import transaction
 
-from api.serializers.owner import OwnerSerializer
+from api.serializers.owner import OwnerSerializer, OwnerListSerializer
 
 
 class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -22,7 +22,7 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             }
             queryset = self.queryset
             obj = get_object_or_404(queryset, pk=request.user.pk)
-            serializer = self.serializer_class(obj, context=serializer_context)
+            serializer = OwnerListSerializer(obj, context=serializer_context)
             return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -32,7 +32,7 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             }
             queryset = self.queryset
             obj = get_object_or_404(queryset, pk=request.user.pk)
-            serializer = self.serializer_class(obj, context=serializer_context)
+            serializer = OwnerListSerializer(obj, context=serializer_context)
             return Response(serializer.data)
 
     def update(self, request, pk=None):
@@ -51,6 +51,11 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
 
 class CreateListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
                      mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    def get_object(self):
+        with transaction.atomic():
+            obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+            self.check_object_permissions(self.request, obj)
+            return obj
 
     def perform_create(self, serializer):
         if serializer.save(owner=self.request.user):

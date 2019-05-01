@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'polymorphic',
+    'base',
+    'users',
 
 
-    'base.apps.BaseConfig',
     'warehouse',
     'rest_framework',
     'rest_framework_swagger',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'storage',
     'product',
     'incoming',
+
 ]
 
 MIDDLEWARE = [
@@ -151,6 +153,7 @@ REST_FRAMEWORK = {
     'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.DjangoModelPermissions'
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -162,4 +165,4 @@ REST_FRAMEWORK = {
 
 }
 
-AUTH_USER_MODEL = 'base.User'
+AUTH_USER_MODEL = 'users.User'

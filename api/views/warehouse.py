@@ -1,12 +1,15 @@
-from api.serializers import warehouse
+from rest_framework import viewsets, mixins
+from api.serializers.owner import WarehouseSerializer
 from api.serializers.warehouse import CellSerializer, CellListSerializer, RackListSerializer
 from base.viewsets import CreateListView
-from warehouse.models import Warehouse, WarehouseCell, Rack
+from users.models import Warehouse
+from warehouse.models import WarehouseCell, Rack
 
 
-class WarehouseAPIView(CreateListView):
+class WarehouseAPIView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                       mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Warehouse.objects.all()
-    serializer_class = warehouse.WarehouseSerializer
+    serializer_class = WarehouseSerializer
 
 
 class RackAPIView(CreateListView):
