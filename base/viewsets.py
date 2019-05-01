@@ -5,6 +5,7 @@ from django.utils.encoding import force_text
 from rest_framework import mixins, viewsets, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from django.db import transaction
 
 from api.serializers.owner import OwnerSerializer
 
@@ -15,34 +16,37 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     queryset = User.objects.all()
 
     def list(self, request):
-        serializer_context = {
-            'request': request,
-        }
-        queryset = self.queryset
-        obj = get_object_or_404(queryset, pk=request.user.pk)
-        serializer = self.serializer_class(obj, context=serializer_context)
-        return Response(serializer.data)
+        with transaction.atomic():
+            serializer_context = {
+                'request': request,
+            }
+            queryset = self.queryset
+            obj = get_object_or_404(queryset, pk=request.user.pk)
+            serializer = self.serializer_class(obj, context=serializer_context)
+            return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        serializer_context = {
-            'request': request,
-        }
-        queryset = self.queryset
-        obj = get_object_or_404(queryset, pk=request.user.pk)
-        serializer = self.serializer_class(obj, context=serializer_context)
-        return Response(serializer.data)
+        with transaction.atomic():
+            serializer_context = {
+                'request': request,
+            }
+            queryset = self.queryset
+            obj = get_object_or_404(queryset, pk=request.user.pk)
+            serializer = self.serializer_class(obj, context=serializer_context)
+            return Response(serializer.data)
 
     def update(self, request, pk=None):
-        serializer_context = {
-            'request': request,
-        }
-        obj = User.objects.select_for_update().get(pk=request.user.pk)
-        serializer = self.serializer_class(obj, context=serializer_context, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            serializer_context = {
+                'request': request,
+            }
+            obj = User.objects.select_for_update().get(pk=request.user.pk)
+            serializer = self.serializer_class(obj, context=serializer_context, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class CreateListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,

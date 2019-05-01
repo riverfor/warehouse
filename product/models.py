@@ -40,6 +40,10 @@ class Product(AbstractBase):
     class Meta:
         verbose_name = 'Номенклатура'
         verbose_name_plural = "Номенклатуры"
+        unique_together = (
+            'vendor',
+            'name',
+        )
 
 
 class StorageUnitsClass(AbstractBase):
@@ -67,4 +71,5 @@ class StorageUnit(AbstractBase):
     class Meta:
         verbose_name = 'Единица хранения'
         verbose_name_plural = "Единицы хранения"
+        unique_together = ('product', 'ratio',)
 

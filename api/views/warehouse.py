@@ -26,7 +26,7 @@ class CellAPIView(CreateListView):
         'update': CellSerializer,
 
     }
-    queryset = WarehouseCell.objects.all()
+    queryset = WarehouseCell.objects.all().order_by('-rack').order_by('-tier').order_by('-position')
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, CellSerializer)

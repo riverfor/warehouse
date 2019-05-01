@@ -31,6 +31,9 @@ class WarehouseCell (AbstractBase):
     cell_length = models.DecimalField(max_digits=5, decimal_places=3, max_length=10, verbose_name='Глубина')
     barcode = models.CharField(max_length=20, null=True, blank=True, unique=True, verbose_name="Штрих код")
 
+    def __str__(self):
+        return str(self.rack.name) + "-" + str(self.tier) + "-" + str(self.position)
+
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.barcode = uuid.uuid4().hex[:20].upper()
@@ -39,4 +42,5 @@ class WarehouseCell (AbstractBase):
     class Meta:
         verbose_name = "Ячейка"
         verbose_name_plural = "Ячейки"
+        unique_together = ('rack', 'tier', 'position')
 
