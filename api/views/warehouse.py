@@ -1,12 +1,17 @@
 from api.serializers import warehouse
-from api.serializers.warehouse import CellSerializer, CellListSerializer
+from api.serializers.warehouse import CellSerializer, CellListSerializer, RackListSerializer
 from base.viewsets import CreateListView
-from warehouse.models import Warehouse, WarehouseCell
+from warehouse.models import Warehouse, WarehouseCell, Rack
 
 
 class WarehouseAPIView(CreateListView):
     queryset = Warehouse.objects.all()
     serializer_class = warehouse.WarehouseSerializer
+
+
+class RackAPIView(CreateListView):
+    queryset = Rack.objects.all()
+    serializer_class = RackListSerializer
 
 
 class CellAPIView(CreateListView):

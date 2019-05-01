@@ -1,5 +1,5 @@
 from django.contrib.admin.models import CHANGE, LogEntry
-from django.contrib.auth.models import User
+from base.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from rest_framework import mixins, viewsets, status
@@ -36,10 +36,13 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
         serializer_context = {
             'request': request,
         }
-        queryset = self.queryset
-        obj = get_object_or_404(queryset, pk=request.user.pk)
-        serializer = self.serializer_class(obj, context=serializer_context)
-        return Response(serializer.data)
+        obj = User.objects.select_for_update().get(pk=request.user.pk)
+        serializer = self.serializer_class(obj, context=serializer_context, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class CreateListView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,

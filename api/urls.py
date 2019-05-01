@@ -2,11 +2,12 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from api.views.product import ContainerClassViews, ProductModelView, ProductView, UnitClassView, UnitView
-from api.views.warehouse import WarehouseAPIView, CellAPIView
+from api.views.warehouse import WarehouseAPIView, CellAPIView, RackAPIView
 from base.viewsets import ProfileView
 
 router = routers.DefaultRouter()
 router.register(r'warehouses', WarehouseAPIView, base_name='warehouse')
+router.register(r'racks', RackAPIView, base_name='rack')
 router.register(r'cells', CellAPIView, base_name='cell')
 router.register(r'container_classes', ContainerClassViews, base_name='container_class')
 router.register(r'product_models', ProductModelView, base_name='product_model')

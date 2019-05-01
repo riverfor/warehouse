@@ -1,5 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    bio = models.TextField(max_length=500, blank=True)
+
+    class Meta:
+        verbose_name = 'User'
 
 
 class AbstractBase(models.Model):
@@ -10,3 +17,6 @@ class AbstractBase(models.Model):
 
     class Meta:
         abstract = True
+
+
+

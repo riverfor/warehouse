@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'polymorphic',
 
 
-    'base',
+    'base.apps.BaseConfig',
     'warehouse',
     'rest_framework',
     'rest_framework_swagger',
@@ -149,3 +149,5 @@ REST_FRAMEWORK = {
     ),
 
 }
+
+AUTH_USER_MODEL = 'base.User'

@@ -4,11 +4,12 @@ from warehouse.models import Warehouse, Rack, WarehouseCell
 
 
 class RackListSerializer(LoggerSerializer, AbstractSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='rack-detail')
 
     class Meta:
         model = Rack
         fields = (
-            'id',
+            'url',
             'name',
         ) + AbstractSerializer.Meta.fields
 
