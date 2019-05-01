@@ -1,7 +1,9 @@
 from django.db import models
 
+from base.models import AbstractBase
 
-class ContainerParams(models.Model):
+
+class ContainerParams(AbstractBase):
     name = models.CharField(max_length=20)
     cont_width = models.IntegerField(verbose_name='Ширина')
     cont_height = models.IntegerField(verbose_name='Высота')
@@ -11,7 +13,7 @@ class ContainerParams(models.Model):
         return self.name
 
 
-class AccountingModelProducts(models.Model):
+class AccountingModelProducts(AbstractBase):
     name = models.CharField(max_length=50, verbose_name='Название')
     use_date = models.BooleanField(default=False, verbose_name='Учет по срока годности')
     use_serial = models.BooleanField(default=False, verbose_name='Учет по серийным номерам')
@@ -25,7 +27,7 @@ class AccountingModelProducts(models.Model):
         verbose_name_plural = 'Модели учета'
 
 
-class Product(models.Model):
+class Product(AbstractBase):
     vendor = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=50, verbose_name='Название')
     model = models.ForeignKey(AccountingModelProducts, on_delete=models.CASCADE, verbose_name='Модель учета')
@@ -40,7 +42,7 @@ class Product(models.Model):
         verbose_name_plural = "Номенклатуры"
 
 
-class StorageUnitsClass(models.Model):
+class StorageUnitsClass(AbstractBase):
     name = models.CharField(max_length=50, verbose_name='Название')
 
     def __str__(self):
@@ -51,7 +53,7 @@ class StorageUnitsClass(models.Model):
         verbose_name_plural = "Классы единиц хранения"
 
 
-class StorageUnit(models.Model):
+class StorageUnit(AbstractBase):
     product = models.ForeignKey(Product, on_delete=models.CASCADE,  related_name='units', verbose_name='Номенклатура')
     ratio = models.IntegerField(default=1, verbose_name='коэфициент')
     unit_class = models.ForeignKey(StorageUnitsClass, on_delete=models.CASCADE,  verbose_name='Класс единицы хранения')

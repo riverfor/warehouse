@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 class Warehouse (AbstractBase):
     name = models.CharField(max_length=50, default="", verbose_name="Название")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
 
     class Meta:
         verbose_name = "Склад"

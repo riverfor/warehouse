@@ -1,15 +1,16 @@
 from rest_framework import serializers
+from base.serializers import AbstractSerializer
 from warehouse.models import Warehouse, Rack, WarehouseCell
 
 
-class RackListSerializer(serializers.ModelSerializer):
+class RackListSerializer(serializers.ModelSerializer, AbstractSerializer):
 
     class Meta:
         model = Rack
         fields = (
             'id',
             'name',
-        )
+        ) + AbstractSerializer.Meta.fields
 
 
 class CellSerializer(serializers.ModelSerializer):
@@ -25,10 +26,11 @@ class CellSerializer(serializers.ModelSerializer):
             'cell_width',
             'cell_height',
             'cell_length',
+
         )
 
 
-class CellListSerializer(serializers.ModelSerializer):
+class CellListSerializer(serializers.ModelSerializer, AbstractSerializer):
     rack = RackListSerializer(read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name='cell-detail')
 
@@ -43,10 +45,10 @@ class CellListSerializer(serializers.ModelSerializer):
             'cell_height',
             'cell_length',
             'barcode',
-        )
+        ) + AbstractSerializer.Meta.fields
 
 
-class WarehouseSerializer(serializers.ModelSerializer):
+class WarehouseSerializer(serializers.ModelSerializer, AbstractSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='warehouse-detail')
 
     class Meta:
@@ -54,4 +56,6 @@ class WarehouseSerializer(serializers.ModelSerializer):
         fields = (
             'url',
             'name',
-        )
+            'owner',
+            'created_at',
+        ) + AbstractSerializer.Meta.fields

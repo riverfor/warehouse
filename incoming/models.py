@@ -1,4 +1,6 @@
 from django.db import models, transaction
+
+from base.models import AbstractBase
 from storage.models import Storage, ContainerProducts, Container
 from warehouse.models import WarehouseCell
 from product.models import Product, StorageUnit, ContainerParams
@@ -6,11 +8,11 @@ from django.core.exceptions import ValidationError
 from django.db.models import Sum
 
 
-class DocumentPlan(models.Model):
+class DocumentPlan(AbstractBase):
     cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE, verbose_name='Адрес приемки')
 
 
-class DocumentProducts(models.Model):
+class DocumentProducts(AbstractBase):
     document = models.ForeignKey(DocumentPlan, on_delete=models.CASCADE, related_name="products")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name='Единица хранения')
