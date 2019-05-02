@@ -1,27 +1,24 @@
 from rest_framework import serializers
 from base.serializers import AbstractSerializer, LoggerSerializer
-from users.models import Warehouse
 from warehouse.models import Rack, WarehouseCell
 
 
 class RackListSerializer(LoggerSerializer, AbstractSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='rack-detail')
 
     class Meta:
         model = Rack
         fields = (
-            'url',
+            'id',
             'name',
         ) + AbstractSerializer.Meta.fields
 
 
 class CellSerializer(LoggerSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='cell-detail')
 
     class Meta:
         model = WarehouseCell
         fields = (
-            'url',
+            'id',
             'rack',
             'tier',
             'position',
@@ -34,12 +31,11 @@ class CellSerializer(LoggerSerializer):
 
 class CellListSerializer(LoggerSerializer, AbstractSerializer):
     rack = RackListSerializer(read_only=True)
-    url = serializers.HyperlinkedIdentityField(view_name='cell-detail')
 
     class Meta:
         model = WarehouseCell
         fields = (
-            'url',
+            'id',
             'rack',
             'tier',
             'position',

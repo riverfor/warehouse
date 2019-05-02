@@ -10,6 +10,9 @@ from django.db.models import Sum
 
 class DocumentPlan(AbstractBase):
     cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE, verbose_name='Адрес приемки')
+    bill = models.CharField(max_length=50, null=True, blank=True)
+    bill_date = models.DateField(null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
 
 
 class DocumentProducts(AbstractBase):
@@ -17,7 +20,7 @@ class DocumentProducts(AbstractBase):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     unit = models.ForeignKey(StorageUnit, on_delete=models.CASCADE, verbose_name='Единица хранения')
     plan = models.IntegerField(verbose_name='Плановое количество базовых едениц')
-    fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц',)
+    fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц', default=0)
 
 
 class DocumentEntry(Storage):
