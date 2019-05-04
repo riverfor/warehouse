@@ -33,6 +33,10 @@ class Product(AbstractBase):
     model = models.ForeignKey(AccountingModelProducts, on_delete=models.CASCADE, verbose_name='Модель учета')
     description = models.TextField(verbose_name='Краткое описание')
     base_cont_type = models.ForeignKey(ContainerParams, on_delete=models.CASCADE, verbose_name='Базовый тип паллеты')
+    base_unit = models.OneToOneField('product.StorageUnit', on_delete=models.CASCADE, related_name='base_unit',
+                                     null=True, unique=True)
+    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='Цена', null=True,
+                                blank=True)
 
     def __str__(self):
         return str(self.vendor) + " " + str(self.name)
@@ -66,7 +70,7 @@ class StorageUnit(AbstractBase):
     unit_length = models.DecimalField(max_digits=5, decimal_places=3, max_length=10, verbose_name='Глубина')
 
     def __str__(self):
-        return str(self.unit_class.name) + str(" (") + str(self.ratio) + str(")")
+        return str(self.product.name) + ' | ' + str(self.unit_class.name) + str(" (") + str(self.ratio) + str(")")
 
     class Meta:
         verbose_name = 'Единица хранения'

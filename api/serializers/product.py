@@ -30,9 +30,25 @@ class ProductModelSerializer(LoggerSerializer, AbstractSerializer):
         ) + AbstractSerializer.Meta.fields
 
 
+class UnitSerializer(LoggerSerializer, AbstractSerializer):
+
+    class Meta:
+        model = StorageUnit
+        fields = (
+            'id',
+            'product',
+            'ratio',
+            'unit_class',
+            'unit_width',
+            'unit_height',
+            'unit_length',
+        ) + AbstractSerializer.Meta.fields
+
+
 class ProductListSerializer(LoggerSerializer, AbstractSerializer):
     model = ProductModelSerializer(read_only=True)
     base_cont_type = ContainerClassSerializer(read_only=True)
+    base_unit = UnitSerializer(read_only=True, many=False)
     units = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='unit-detail')
 
     class Meta:
@@ -43,7 +59,9 @@ class ProductListSerializer(LoggerSerializer, AbstractSerializer):
             'name',
             'description',
             'model',
+            'price',
             'base_cont_type',
+            'base_unit',
             'units',
         ) + AbstractSerializer.Meta.fields
 
@@ -59,6 +77,8 @@ class ProductSerializer(LoggerSerializer):
             'description',
             'model',
             'base_cont_type',
+            'base_unit',
+            'price',
         )
 
 
@@ -75,21 +95,6 @@ class UnitClassSerializer(LoggerSerializer, AbstractSerializer):
 class UnitListSerializer(LoggerSerializer, AbstractSerializer):
     unit_class = UnitClassSerializer(read_only=True)
     product = ProductSerializer(read_only=True)
-
-    class Meta:
-        model = StorageUnit
-        fields = (
-            'id',
-            'product',
-            'ratio',
-            'unit_class',
-            'unit_width',
-            'unit_height',
-            'unit_length',
-        ) + AbstractSerializer.Meta.fields
-
-
-class UnitSerializer(LoggerSerializer, AbstractSerializer):
 
     class Meta:
         model = StorageUnit
