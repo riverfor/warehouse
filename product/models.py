@@ -18,6 +18,7 @@ class AccountingModelProducts(AbstractBase):
     use_date = models.BooleanField(default=False, verbose_name='Учет по срока годности')
     use_serial = models.BooleanField(default=False, verbose_name='Учет по серийным номерам')
     use_parts = models.BooleanField(default=False, verbose_name='Учет по партиям')
+    use_mono_container = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -30,7 +31,9 @@ class AccountingModelProducts(AbstractBase):
 class Product(AbstractBase):
     vendor = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=50, verbose_name='Название')
-    model = models.ForeignKey(AccountingModelProducts, on_delete=models.CASCADE, verbose_name='Модель учета')
+    model = models.ForeignKey(AccountingModelProducts, on_delete=models.CASCADE, verbose_name='Модель учета',
+                              related_name='model')
+
     description = models.TextField(verbose_name='Краткое описание')
     base_cont_type = models.ForeignKey(ContainerParams, on_delete=models.CASCADE, verbose_name='Базовый тип паллеты')
     base_unit = models.OneToOneField('product.StorageUnit', on_delete=models.CASCADE, related_name='base_unit',
