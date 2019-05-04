@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from api.views.incoming import ExpectedAcceptanceListView
+from api.views.incoming import ExpectedAcceptanceListView, AcceptanceProductsView
 from api.views.product import ContainerClassViews, ProductModelView, ProductView, UnitClassView, UnitView
 from api.views.warehouse import WarehouseAPIView, CellAPIView, RackAPIView
 from base.viewsets import ProfileView
@@ -17,6 +17,7 @@ router.register(r'unit_classes', UnitClassView, base_name='unit_class')
 router.register(r'units', UnitView, base_name='unit')
 
 router.register(r'expected_acceptance', ExpectedAcceptanceListView, basename='expected_acceptance')
+router.register(r'acceptance_products', AcceptanceProductsView, base_name='acceptance_product')
 
 router.register(r'profile', ProfileView, base_name='profile')
 

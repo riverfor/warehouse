@@ -1,6 +1,6 @@
 from base.serializers import AbstractSerializer
 from rest_framework import serializers
-from incoming.models import DocumentPlan
+from incoming.models import DocumentPlan, DocumentProducts
 from api.serializers.warehouse import CellSerializer
 
 
@@ -29,3 +29,35 @@ class ExpectedAcceptanceSerializer(serializers.ModelSerializer, AbstractSerializ
             'bill_date',
             'comments',
         ) + AbstractSerializer.Meta.fields
+
+
+class AcceptanceProductsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model= DocumentProducts
+        fields = (
+            'id',
+            'document',
+            'product',
+            'unit',
+            'plan',
+        )
+
+
+class AcceptanceProductsListSerializer(serializers.ModelSerializer):
+    document = ExpectedAcceptanceSerializer(read_only=True)
+
+    from api.serializers.product import ProductSerializer, UnitSerializer
+    product = ProductSerializer(read_only=True)
+    unit = UnitSerializer(read_only=True)
+
+    class Meta:
+        model = DocumentProducts
+        fields = (
+            'id',
+            'document',
+            'product',
+            'unit',
+            'plan',
+            'fact',
+        )

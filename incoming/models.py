@@ -22,6 +22,12 @@ class DocumentProducts(AbstractBase):
     plan = models.IntegerField(verbose_name='Плановое количество базовых едениц')
     fact = models.IntegerField(verbose_name='Фактическое количество базовых едениц', default=0)
 
+    class Meta:
+        unique_together =(
+            'document',
+            'product',
+        )
+
 
 class DocumentEntry(Storage):
     doc_plan = models.ForeignKey(DocumentPlan, on_delete=models.CASCADE, null=True)
