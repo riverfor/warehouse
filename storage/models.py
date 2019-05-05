@@ -10,6 +10,15 @@ class Container(AbstractBase):
     cont_type = models.ForeignKey(ContainerParams, on_delete=models.CASCADE)
     barcode = models.CharField(max_length=20, unique=True)
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            import uuid
+            self.barcode = uuid.uuid4().hex[:20].upper()
+        super(Container, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.cont_type.name) + " " + str(self.pk)
+
 
 class ContainerProducts(AbstractBase):
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
@@ -22,8 +31,3 @@ class ContainerProducts(AbstractBase):
 class Storage(PolymorphicModel):
     cell = models.ForeignKey(WarehouseCell, on_delete=models.CASCADE, verbose_name="Ячейка")
     container = models.ForeignKey(Container, on_delete=models.CASCADE, null=True, blank=True)
-
-
-
-
-

@@ -80,10 +80,8 @@ class DocumentEntry(Storage):
             if self.container_type is None:
                 self.container_type = self.nomenclature.base_cont_type
 
-            import uuid
             if self.pk is None:
-                cont = Container.objects.create(cont_type=self.container_type, barcode=uuid.uuid4().hex[:20].upper(),
-                                                owner=self.owner)
+                cont = Container.objects.create(cont_type=self.container_type, owner=self.owner)
                 if cont:
                     return cont
                 else:
