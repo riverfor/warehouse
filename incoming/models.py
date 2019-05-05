@@ -13,6 +13,9 @@ class DocumentPlan(AbstractBase):
     bill_date = models.DateField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return str(self.bill) + " " + str(self.cell.name)
+
 
 class DocumentProducts(AbstractBase):
     document = models.ForeignKey(DocumentPlan, on_delete=models.CASCADE, related_name="products")
