@@ -2,6 +2,7 @@ from base.serializers import AbstractSerializer
 from rest_framework import serializers
 from incoming.models import DocumentPlan, DocumentProducts, DocumentEntry
 from api.serializers.warehouse import CellSerializer
+from warehouse.models import WarehouseCell, ACCEPTANCE
 
 
 class ExpectedAcceptanceListSerializer(serializers.ModelSerializer, AbstractSerializer):
@@ -19,6 +20,8 @@ class ExpectedAcceptanceListSerializer(serializers.ModelSerializer, AbstractSeri
 
 
 class ExpectedAcceptanceSerializer(serializers.ModelSerializer, AbstractSerializer):
+    cell_query = WarehouseCell.objects.filter(cell_type=ACCEPTANCE)
+    cell = serializers.PrimaryKeyRelatedField(queryset=cell_query)
 
     class Meta:
         model = DocumentPlan

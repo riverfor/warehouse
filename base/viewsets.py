@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from django.db import transaction
 
-from api.serializers.owner import OwnerSerializer, OwnerListSerializer
+from api.serializers.owner import OwnerSerializer
 
 
 class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -22,7 +22,7 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             }
             queryset = self.queryset
             obj = get_object_or_404(queryset, pk=request.user.pk)
-            serializer = OwnerListSerializer(obj, context=serializer_context)
+            serializer = OwnerSerializer(obj, context=serializer_context)
             return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -32,7 +32,7 @@ class ProfileView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             }
             queryset = self.queryset
             obj = get_object_or_404(queryset, pk=request.user.pk)
-            serializer = OwnerListSerializer(obj, context=serializer_context)
+            serializer = OwnerSerializer(obj, context=serializer_context)
             return Response(serializer.data)
 
     def update(self, request, pk=None):

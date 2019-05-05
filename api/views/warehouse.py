@@ -1,9 +1,9 @@
 from rest_framework import viewsets, mixins
-from api.serializers.owner import WarehouseSerializer
-from api.serializers.warehouse import CellSerializer, CellListSerializer, RackListSerializer
+from api.serializers.warehouse import CellSerializer, CellListSerializer, RackListSerializer, WarehouseSerializer, \
+    TierListSerializer, PositionListSerializer
 from base.viewsets import CreateListView
 from users.models import Warehouse
-from warehouse.models import WarehouseCell, Rack
+from warehouse.models import WarehouseCell, Rack, Tier, Position
 
 
 class WarehouseAPIView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -15,6 +15,16 @@ class WarehouseAPIView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
 class RackAPIView(CreateListView):
     queryset = Rack.objects.all()
     serializer_class = RackListSerializer
+
+
+class TierAPIView(CreateListView):
+    queryset = Tier.objects.all()
+    serializer_class = TierListSerializer
+
+
+class PositionAPIView(CreateListView):
+    queryset = Position.objects.all()
+    serializer_class = PositionListSerializer
 
 
 class CellAPIView(CreateListView):
