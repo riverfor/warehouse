@@ -3,10 +3,12 @@ from rest_framework import serializers
 
 
 class WarehouseSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='warehouse-detail')
 
     class Meta:
         model = Warehouse
         fields = (
+            'url',
             'id',
             'name',
         )
